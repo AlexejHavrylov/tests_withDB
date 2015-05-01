@@ -15,11 +15,11 @@ db = MySQLdb.connect(host="localhost", # your host, usually localhost
                       passwd="1234", # your password
                       db="test") # name of the data base
 
-# you must create a Cursor object. It will let
-#  you execute all the queries you need
+# create a Cursor object. It will let
+# Cursor executes all the queries you want
 cur = db.cursor() 
 
-# Use all the SQL you like
+# Use all the SQL 
 cur.execute("SELECT * FROM customers")
 
 # print all the first cell of all the rows
