@@ -24,6 +24,7 @@ class UsersData:
        cred=UsersData.cred
        for data in cred:
            print data
+           
 newUser=UsersData()
 newUser.credentials() 
 
