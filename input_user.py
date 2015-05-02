@@ -14,11 +14,8 @@ class UsersData:
             "please, enter db host and press \"Return/Enter\": ")
         self.dbuser = raw_input(
             "please, enter db user and press \"Return/Enter\": ")
-#         self.dbpassword = getpass.getpass(
-#             "please, enter password and press \"Return/Enter\": ")      # doesn't work right at eclipse
-        self.dbpassword = '1234'
-        # use real password when work at Eclipse
-
+        self.dbpassword = getpass.getpass(
+            "please, enter password and press \"Return/Enter\": ")      # doesn't work right at eclipse
         self.dbname = self.dbname = raw_input(
             "please, enter db name and press \"Return/Enter\": ")
         dbhost = self.dbhost
@@ -51,6 +48,9 @@ class UsersData:
         db.close()
 
     def insert_into(self, num):
+        """
+        method executes sql query INSERT INTO customers
+        """
         db = self.db
         cursor = db.cursor()
 
