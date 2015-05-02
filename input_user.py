@@ -14,9 +14,9 @@ class UsersData:
             "please, enter db host and press \"Return/Enter\": ")
         self.dbuser = raw_input(
             "please, enter db user and press \"Return/Enter\": ")
-        self.dbpassword = getpass.getpass(
-            "please, enter password and press \"Return/Enter\": ")      # doesn't work right at eclipse
-
+#         self.dbpassword = getpass.getpass(
+#             "please, enter password and press \"Return/Enter\": ")      # doesn't work right at eclipse
+        self.dbpassword = '1234'
         # use real password when work at Eclipse
 
         self.dbname = self.dbname = raw_input(
@@ -29,11 +29,13 @@ class UsersData:
         db = self.db
         cursor = db.cursor()
         cursor.execute("DROP TABLE IF EXISTS customers")
-        query_1 = "CREATE TABLE customers(row_number INT NOT NULL AUTO_INCREMENT, Customer VARCHAR(100) NOT NULL, Customer_ID INT , Date DATE, Comments  VARCHAR(100),PRIMARY KEY ( row_number ));"
+        query_1 = "CREATE TABLE  customers(row_number INT NOT NULL AUTO_INCREMENT, Customer VARCHAR(100) NOT NULL, Customer_ID VARCHAR(100),Date DATE,Comments  VARCHAR(100), PRIMARY KEY ( row_number ));"
         cursor.execute(query_1)
+        """
         query_2 = "INSERT INTO customers (row_number, Customer, Customer_ID, Date,Comments) VALUES (1, 'Customer1', '1','2010-01-11','good customer');"
         cursor.execute(query_2)
         self.select_all()
+        """
 
     def select_all(self):
         """
@@ -48,5 +50,18 @@ class UsersData:
             print row
         db.close()
 
+    def insert_into(self, num):
+        db = self.db
+        cursor = db.cursor()
+
+        i = 0
+        while i < num:
+            i += 1
+
+            query = "INSERT INTO customers (Customer, Customer_ID) VALUES ('Customer" + str(
+                i) + "\'" ", 'CustomerID" + str(i) + "\');"
+#             print query
+            cursor.execute(query)
+        self.select_all()
 newUser = UsersData()
-# newUser.insert_into(3)
+newUser.insert_into(33)
