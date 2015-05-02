@@ -10,24 +10,20 @@ class UsersData:
 
     def __init__(self):
         UsersData.usersCount += 1
-
-        self.host = raw_input(
+        dbhost = raw_input(
             "please, enter db host and press \"Return/Enter\": ")
-        self.dbuser = raw_input(
-            "please, enter login and press \"Return/Enter\": ")
+        dbuser = raw_input(
+            "please, enter db user and press \"Return/Enter\": ")
+#         dbpassword = getpass.getpass(
+#             "please,enter password and press \"Return/Enter\": ")#doesn't work right at eclipse
 
-        self.dbpassword = getpass.getpass(
-            "please,enter Database password and press \"Return/Enter\": ")
-        self.dbname = raw_input(
+        dbpassword = '1234'  # use real password when work at Eclipse
+        # should be replaced before publishing
+        dbname = self.dbname = raw_input(
             "please, enter db name and press \"Return/Enter\": ")
 
-        host = self.host
-        user = self.dbuser
-        password = self.dbpassword
-        name = self.dbname
-
-        print host, user, name, password
-        db = MySQLdb.connect(host, user, password, name)
+        db = MySQLdb.connect(
+            host=dbhost, user=dbuser, passwd=dbpassword, db=dbname)
         cur = db.cursor()
         #
         # # Use all the SQL
@@ -39,4 +35,3 @@ class UsersData:
 
 
 newUser = UsersData()
-newUser.dbconnect()
