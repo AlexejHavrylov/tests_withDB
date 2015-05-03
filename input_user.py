@@ -27,12 +27,23 @@ class UsersData:
         cursor = db.cursor()
         cursor.execute("DROP TABLE IF EXISTS customers")
         query_1 = "CREATE TABLE  customers(row_number INT NOT NULL AUTO_INCREMENT, Customer VARCHAR(100) NOT NULL, Customer_ID VARCHAR(100),Date DATE,Comments  VARCHAR(100), PRIMARY KEY ( row_number ));"
+
         cursor.execute(query_1)
+
+    def enter_number(self):
         """
-        query_2 = "INSERT INTO customers (row_number, Customer, Customer_ID, Date,Comments) VALUES (1, 'Customer1', '1','2010-01-11','good customer');"
-        cursor.execute(query_2)
-        self.select_all()
+        Method takes user data and verifies the type('int' or 'str') of entered data.
+
         """
+        i = 4
+        while i > 0:
+            try:
+                a = input("Enter the number of additional row: ")
+                i = 0
+            except NameError:
+                print "You entered number! Are you ok?"
+                i -= 1
+        return a
 
     def select_all(self):
         """
@@ -47,21 +58,20 @@ class UsersData:
             print row
         db.close()
 
-    def insert_into(self, num):
+    def insert_into(self):
         """
         method executes sql query INSERT INTO customers
         """
+        num = self.enter_number()
         db = self.db
         cursor = db.cursor()
-
         i = 0
         while i < num:
             i += 1
-
             query = "INSERT INTO customers (Customer, Customer_ID) VALUES ('Customer" + str(
                 i) + "\'" ", 'CustomerID" + str(i) + "\');"
-#             print query
+            print query
             cursor.execute(query)
         self.select_all()
 newUser = UsersData()
-newUser.insert_into(33)
+newUser.insert_into()
