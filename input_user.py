@@ -29,6 +29,7 @@ class UsersData:
         query_1 = "CREATE TABLE  customers(row_number INT NOT NULL AUTO_INCREMENT, Customer VARCHAR(100) NOT NULL, Customer_ID VARCHAR(100),Date DATE,Comments  VARCHAR(100), PRIMARY KEY ( row_number ));"
 
         cursor.execute(query_1)
+        db.commit()
 
     def enter_number(self):
         """
@@ -70,8 +71,9 @@ class UsersData:
             i += 1
             query = "INSERT INTO customers (Customer, Customer_ID) VALUES ('Customer" + str(
                 i) + "\'" ", 'CustomerID" + str(i) + "\');"
-            print query
+
             cursor.execute(query)
+            db.commit()
         self.select_all()
 newUser = UsersData()
 newUser.insert_into()
