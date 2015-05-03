@@ -38,12 +38,12 @@ class UsersData:
         i = 4
         while i > 0:
             try:
-                a = input("Enter the number of additional row: ")
+                entered_data = input("Enter the number of additional row: ")
                 i = 0
             except NameError:
                 print "You entered number! Are you ok?"
                 i -= 1
-        return a
+        return entered_data
 
     def select_all(self):
         """
@@ -62,11 +62,11 @@ class UsersData:
         """
         method executes sql query INSERT INTO customers
         """
-        num = self.enter_number()
+        entered_data = self.enter_number()
         db = self.db
         cursor = db.cursor()
         i = 0
-        while i < num:
+        while i < entered_data:
             i += 1
             query = "INSERT INTO customers (Customer, Customer_ID) VALUES ('Customer" + str(
                 i) + "\'" ", 'CustomerID" + str(i) + "\');"
