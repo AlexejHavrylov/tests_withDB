@@ -11,8 +11,7 @@ db = MySQLdb.connect("localhost", "newuser", "1234", "test")
 cursor = db.cursor()
 
 # Prepare SQL query to INSERT a record into the database.
-sql = """INSERT INTO customers (row_number, Customer, Customer_ID, Date,Comments)
-VALUES (1, 'Customer1', '0001','2010-04-11','good customer');"""
+sql = "INSERT INTO customers (row_number, Customer, Customer_ID, Date,Comments) VALUES (1, 'Customer1', 'CustomerID1','20140312','Comment1');"
 try:
     # Execute the SQL command
     cursor.execute(sql)
