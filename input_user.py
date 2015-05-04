@@ -5,7 +5,7 @@ import MySQLdb
 
 
 class UsersData:
-    'this class get users credentials and connect to defined DB'
+    'This class get users credentials and connect to defined DB'
     usersCount = 0
 
     def __init__(self):
