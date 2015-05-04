@@ -27,7 +27,6 @@ class UsersData:
         cursor = db.cursor()
         cursor.execute("DROP TABLE IF EXISTS customers")
         query_1 = "CREATE TABLE  customers(row_number INT NOT NULL AUTO_INCREMENT, Customer VARCHAR(100) NOT NULL, Customer_ID VARCHAR(100),Date DATE,Comments  VARCHAR(100), PRIMARY KEY ( row_number ));"
-
         cursor.execute(query_1)
         db.commit()
 
@@ -63,6 +62,7 @@ class UsersData:
         """
         method executes sql query INSERT INTO customers
         """
+
         entered_data = self.enter_number()
         db = self.db
         cursor = db.cursor()
@@ -75,5 +75,7 @@ class UsersData:
             cursor.execute(query)
             db.commit()
         self.select_all()
+
+
 newUser = UsersData()
 newUser.insert_into()
