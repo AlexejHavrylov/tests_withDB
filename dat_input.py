@@ -2,17 +2,23 @@
 # -*- coding: utf-8 -*-
 import getpass
 import MySQLdb
+import random
 
 
 class UsersData:
     'This class get users credentials and connect to defined DB'
 
-    def __init__(self):
-        self.input_data()
-        self.perform_task()
-        self.show_input()
+    def input_data(self, dbhost, dbuser, dbpassword, dbname, table, rows_to_add, bulk_size, id_column):
+        self.dbhost = dbhost
+        self.dbuser = dbuser
+        self.dbpassword = dbpassword
+        self.dbname = dbname
+        self.table = table
+        self.rows_to_add = rows_to_add
+        self.bulk_size = bulk_size
+        self.id_column = id_column
 
-    def input_data(self):
+    def visual_input_data(self):
         self.dbhost = raw_input(
             "please, enter db host and press \"Return/Enter\": ")
         self.dbuser = raw_input(
@@ -30,10 +36,20 @@ class UsersData:
         self.id_column = raw_input("please, enter id column: ")
 
     def perform_task(self):
-        self.db = MySQLdb.connect(
+        db = MySQLdb.connect(
             self.dbhost, self.dbuser, self.dbpassword, self.dbname)
-        db = self.db
         cursor = db.cursor()
+        query = "SELECT " + self.id_column + " FROM " + self.table + ";"
+        cursor.execute(query)
+        rows = cursor.fetchall()
+        random_row_id = random.choice(rows)[0]
+        print random_row_id
+        random_row_query = "SELECT * FROM " + self.table + \
+            " WHERE " + self.id_column + " = " + str(random_row_id) + ";"
+        cursor.execute(random_row_query)
+        row = cursor.fetchall()
+        print row
+        db.close()
 
     def show_input(self):
         print self.dbhost, self.dbpassword, self.dbuser, self.dbname, self.table, self.rows_to_add, self.id_column, self.bulk_size
@@ -58,8 +74,10 @@ class UsersData:
         method executes sql query SELECT * FROM customers
         """
         db = self.db
+        table = self.table
         cursor = db.cursor()
-        query = "SELECT * FROM customers;"
+
+        query = "SELECT * FROM " + table + ";"
         cursor.execute(query)
         rows = cursor.fetchall()
         for row in rows:
@@ -68,3 +86,8 @@ class UsersData:
 
 
 newUser = UsersData()
+# newUser.visual_input_data()
+newUser.input_data(
+    "localhost", "newuser", "1234", "test", "customers", 12, 4, "row_number")
+newUser.perform_task()
+newUser.show_input()
