@@ -92,7 +92,7 @@ class UsersData:
             column_names = self.get_column_names()
             random_row_id = self.find_id()[0]
             insert_query = "INSERT INTO " + self.table + \
-                "( " + column_names + ") SELECT " + column_names + " FROM " + self.table + " WHERE " + \
+                "( " + column_names + ") SELECT " + self.get_columns_with_replaced_dates() + " FROM " + self.table + " WHERE " + \
                 self.id_column + " = " + str(random_row_id) + ";"
             self.show_query(insert_query)
             cursor.execute(insert_query)
@@ -144,7 +144,7 @@ class UsersData:
             print row
         db.close()
 
-    def some_func(self):
+    def get_columns_with_replaced_dates(self):
         self.connect_to_db()
         db = self.db
         cursor = db.cursor()
@@ -166,7 +166,13 @@ class UsersData:
         for i in range(0, len(List_of_values)):
             if(isinstance(List_of_values[i], datetime.datetime)):
                 List_of_columns[i] = "now()"
-        print List_of_columns
+
+        for line in List_of_columns:
+            if line == self.id_column:
+                # Removes column with id
+                List_of_columns.remove(line)
+                # convert List_of_column to strings for query:
+        return join(List_of_columns).replace(" ", ", ")
 
 
 newUser = UsersData()
@@ -174,4 +180,3 @@ newUser = UsersData()
 newUser.input_data(
     "localhost", "newuser", "1234", "test", "customers", 3, 4, "row_number")
 newUser.perform_task()
-newUser.some_func()
