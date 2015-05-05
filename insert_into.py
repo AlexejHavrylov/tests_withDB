@@ -1,6 +1,6 @@
 #!/usr/bin/python
 '''
-script executes SQL query INSERT_INTO in table "customers' 
+script executes SQL query DROP TABLE "customers"
 '''
 import MySQLdb
 
@@ -11,15 +11,7 @@ db = MySQLdb.connect("localhost", "newuser", "1234", "test")
 cursor = db.cursor()
 
 # Prepare SQL query to INSERT a record into the database.
-sql = "INSERT INTO customers (row_number, Customer, Customer_ID, Date,Comments) VALUES (1, 'Customer1', 'CustomerID1','20140312','Comment1');"
-try:
-    # Execute the SQL command
-    cursor.execute(sql)
-    # Commit your changes in the database
-    db.commit()
-except:
-    # Rollback in case there is any error
-    db.rollback()
-
-# disconnect from server
+sql = "CREATE TABLE  customers(row_number INT NOT NULL AUTO_INCREMENT, Customer VARCHAR(100) NOT NULL, Customer_ID VARCHAR(100),Date datetime, Comments  VARCHAR(100),PRIMARY KEY ( row_number ));"
+cursor.execute(sql)
+db.commit()
 db.close()
