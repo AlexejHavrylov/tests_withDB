@@ -7,7 +7,7 @@ from string import join
 
 
 class UsersData:
-    'This class get users credentials and connect to defined DB'
+    "This class get users credentials and connect to defined DB"
 
     def input_data(self, dbhost, dbuser, dbpassword, dbname, table, rows_to_add, bulk_size, id_column):
         self.dbhost = dbhost
@@ -36,9 +36,12 @@ class UsersData:
             "Please, enter bulk size of insert operation: ")
         self.id_column = raw_input("please, enter id column: ")
 
-    def perform_task(self):
+    def connect_to_db(self):
         self.db = MySQLdb.connect(
             self.dbhost, self.dbuser, self.dbpassword, self.dbname)
+
+    def find_id(self):
+        self.connect_to_db()
         db = self.db
         cursor = db.cursor()
         query = "SELECT " + self.id_column + " FROM " + self.table + ";"
@@ -46,12 +49,17 @@ class UsersData:
         cursor.execute(query)
         rows = cursor.fetchall()
         random_row_id = random.choice(rows)[0]
-
         random_row_query = "SELECT * FROM " + self.table + \
             " WHERE " + self.id_column + " = " + str(random_row_id) + ";"
         self.show_query(random_row_query)
         cursor.execute(random_row_query)
         random_row = cursor.fetchall()
+        return random_row_id, random_row
+
+    def get_column_names(self):
+        self.connect_to_db()
+        db = self.db
+        cursor = db.cursor()
         column_names_query = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA ='" + \
             self.dbname + "' AND TABLE_NAME='" + self.table + "';"
         self.show_query(column_names_query)
@@ -68,13 +76,31 @@ class UsersData:
                 List_of_columns.remove(line)
                 # convert List_of_column to strings for query:
         column_names = join(List_of_columns).replace(" ", ", ")
-        insert_query = "INSERT INTO " + self.table + \
-            "( " + column_names + ") SELECT " + column_names + " FROM " + self.table + " WHERE " + \
-            self.id_column + " = " + str(random_row_id) + ";"
-        self.show_query(insert_query)
-        cursor.execute(insert_query)
-        db.commit()
-        self.select_all()
+        return column_names
+
+    def perform_task(self):
+        """
+        Method takes data  from randomly selected row 
+        and added it to defined table.
+        """
+        try:
+            self.connect_to_db()
+            db = self.db
+            cursor = db.cursor()
+#             self.select_all(" Started...")
+            column_names = self.get_column_names()
+            random_row_id = self.find_id()[0]
+            insert_query = "INSERT INTO " + self.table + \
+                "( " + column_names + ") SELECT " + column_names + " FROM " + self.table + " WHERE " + \
+                self.id_column + " = " + str(random_row_id) + ";"
+            self.show_query(insert_query)
+            cursor.execute(insert_query)
+            db.commit()
+            db.close()
+        except:
+            print "Can\'t get data from table \'" + self.table + "\'..."
+        finally:
+            self.select_all("Checking a Data base...")
 
     def show_input(self):
         print self.dbhost, self.dbpassword, self.dbuser, self.dbname, self.table, self.rows_to_add, self.id_column, self.bulk_size
@@ -95,29 +121,30 @@ class UsersData:
         return entered_data
 
     def show_query(self, query):
+        """
+        Method displayed a SQL query on console.
+        """
         print "Now executed SQL query:"
         print "\n" + query + "\n"
 
-    def select_all(self, message="Checking a Data base..."):
+    def select_all(self, message):
         """
         method executes sql query SELECT * FROM customers
         """
-        print "\n" + message + "\n"
+        self.connect_to_db()
+        print message + "\n"
         db = self.db
         table = self.table
         cursor = db.cursor()
-
-        query = "SELECT * FROM " + table + ";"
-        cursor.execute(query)
+        select_query = "SELECT * FROM " + table + ";"
+        cursor.execute(select_query)
         rows = cursor.fetchall()
         for row in rows:
             print row
-
         db.close()
-
 
 newUser = UsersData()
 # newUser.visual_input_data()
 newUser.input_data(
-    "localhost", "newuser", "1234", "test", "customers", 12, 4, "row_number")
+    "localhost", "newuser", "1234", "test", "customers", 3, 4, "row_number")
 newUser.perform_task()
