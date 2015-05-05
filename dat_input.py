@@ -95,6 +95,9 @@ class UsersData:
         return entered_data
 
     def show_query(self, query):
+        """
+        Method displayed a SQL query on console.
+        """
         print "Now executed SQL query:"
         print "\n" + query + "\n"
 
