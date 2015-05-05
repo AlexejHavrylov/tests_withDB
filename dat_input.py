@@ -3,6 +3,7 @@
 import getpass
 import MySQLdb
 import random
+import datetime
 from string import join
 
 
@@ -143,8 +144,34 @@ class UsersData:
             print row
         db.close()
 
+    def some_func(self):
+        self.connect_to_db()
+        db = self.db
+        cursor = db.cursor()
+        column_names_query = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA ='" + \
+            self.dbname + "' AND TABLE_NAME='" + self.table + "';"
+        self.show_query(column_names_query)
+        cursor.execute(column_names_query)
+        row_2 = cursor.fetchall()
+        # convert column name from tuple to list
+        List_of_columns = []
+        for row in row_2:
+            List_of_columns.append(row[0])
+        random_row = self.find_id()[1]
+
+        List_of_values = []
+        for line in random_row[0]:
+
+            List_of_values.append(line)
+        for i in range(0, len(List_of_values)):
+            if(isinstance(List_of_values[i], datetime.datetime)):
+                List_of_columns[i] = "now()"
+        print List_of_columns
+
+
 newUser = UsersData()
 # newUser.visual_input_data()
 newUser.input_data(
     "localhost", "newuser", "1234", "test", "customers", 3, 4, "row_number")
 newUser.perform_task()
+newUser.some_func()
