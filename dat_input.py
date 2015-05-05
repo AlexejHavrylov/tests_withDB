@@ -87,7 +87,7 @@ class UsersData:
             self.connect_to_db()
             db = self.db
             cursor = db.cursor()
-#             self.select_all(" Started...")
+#             self.print_table(" Started...")
             column_names = self.get_column_names()
             random_row_id = self.find_id()[0]
             insert_query = "INSERT INTO " + self.table + \
@@ -100,7 +100,7 @@ class UsersData:
         except:
             print "Can\'t get data from table \'" + self.table + "\'..."
         finally:
-            self.select_all("Checking a Data base...")
+            self.print_table("Checking a Data base...")
 
     def show_input(self):
         print self.dbhost, self.dbpassword, self.dbuser, self.dbname, self.table, self.rows_to_add, self.id_column, self.bulk_size
@@ -127,7 +127,7 @@ class UsersData:
         print "Now executed SQL query:"
         print "\n" + query + "\n"
 
-    def select_all(self, message):
+    def print_table(self, message):
         """
         method executes sql query SELECT * FROM customers
         """
