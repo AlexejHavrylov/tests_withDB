@@ -12,4 +12,4 @@ After it script executed all tasks and show result at console.
 script user_input.py it main executor of task.
 reload.py used for some manipulations with debagging.
 
-
+Should be installed module getpass, MySQLdb!!!

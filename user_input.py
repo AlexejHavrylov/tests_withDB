@@ -1,9 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import getpass
+
 import MySQLdb
+
 import random
+
 import datetime
+
 from string import join
 
 
