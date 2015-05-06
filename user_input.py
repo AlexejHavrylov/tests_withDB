@@ -10,17 +10,7 @@ from string import join
 class UsersData:
     "This class get users credentials and connect to defined DB"
 
-    def input_data(self, dbhost, dbuser, dbpassword, dbname, table, rows_to_add, bulk_size, id_column):
-        self.dbhost = dbhost
-        self.dbuser = dbuser
-        self.dbpassword = dbpassword
-        self.dbname = dbname
-        self.table = table
-        self.rows_to_add = rows_to_add
-        self.bulk_size = bulk_size
-        self.id_column = id_column
-
-    def visual_input_data(self):
+    def user_input_data(self):
         self.dbhost = raw_input(
             "please, enter db host and press \"Return/Enter\": ")
         self.dbuser = raw_input(
@@ -79,25 +69,37 @@ class UsersData:
         column_names = join(List_of_columns).replace(" ", ", ")
         return column_names
 
+    def insert_value(self):
+        self.connect_to_db()
+        db = self.db
+        cursor = db.cursor()
+#       self.print_table(" Started...")
+        column_names = self.get_column_names()
+        random_row_id = self.find_id()[0]
+        i = 0
+        insert_query = "INSERT INTO " + self.table + \
+            "( " + column_names + ") VALUES "
+        while i < self.bulk_size:
+            insert_query += "(" + self.get_values_with_replaced_dates() + ") ,"
+            if (i == self.bulk_size - 1):
+                insert_query = insert_query[:-1] + ";"
+            i += 1
+        self.show_query(insert_query)
+        cursor.execute(insert_query)
+        db.commit()
+        db.close()
+
     def perform_task(self):
         """
         Method takes data  from randomly selected row 
         and added it to defined table.
         """
         try:
-            self.connect_to_db()
-            db = self.db
-            cursor = db.cursor()
-#             self.print_table(" Started...")
-            column_names = self.get_column_names()
-            random_row_id = self.find_id()[0]
-            insert_query = "INSERT INTO " + self.table + \
-                "( " + column_names + ") SELECT " + self.get_columns_with_replaced_dates() + " FROM " + self.table + " WHERE " + \
-                self.id_column + " = " + str(random_row_id) + ";"
-            self.show_query(insert_query)
-            cursor.execute(insert_query)
-            db.commit()
-            db.close()
+            i = 0
+            while i < self.rows_to_add / self.bulk_size:
+                print i
+                self.insert_value()
+                i += 1
         except:
             print "Can\'t get data from table \'" + self.table + "\'..."
         finally:
@@ -174,9 +176,43 @@ class UsersData:
                 # convert List_of_column to strings for query:
         return join(List_of_columns).replace(" ", ", ")
 
+    def get_values_with_replaced_dates(self):
+        self.connect_to_db()
+        db = self.db
+        cursor = db.cursor()
+        column_names_query = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA ='" + \
+            self.dbname + "' AND TABLE_NAME='" + self.table + "';"
+        self.show_query(column_names_query)
+        cursor.execute(column_names_query)
+        row_2 = cursor.fetchall()
+        # convert column name from tuple to list
+        List_of_columns = []
+        for row in row_2:
+            List_of_columns.append(row[0])
+        random_row = self.find_id()[1]
+
+        List_of_values = []
+        for line in random_row[0]:
+
+            List_of_values.append(line)
+        i = 0
+        while i < len(List_of_values):
+            if(isinstance(List_of_values[i], str)):
+                List_of_values[i] = "'" + List_of_values[i] + "'"
+
+            elif(isinstance(List_of_values[i], datetime.datetime)):
+                # change values of date columns
+                List_of_values[i] = "now()"
+
+            elif(List_of_columns[i] == self.id_column):
+                del List_of_values[i]
+                i = i - 1
+
+            i += 1
+
+        return join(List_of_values).replace(" ", ", ")
+
 
 newUser = UsersData()
-# newUser.visual_input_data()
-newUser.input_data(
-    "localhost", "newuser", "1234", "test", "customers", 3, 4, "row_number")
+newUser.user_input_data()
 newUser.perform_task()
