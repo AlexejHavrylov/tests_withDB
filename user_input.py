@@ -15,21 +15,22 @@ class UsersData:
     "This class get users credentials and connect to defined DB"
 
     def user_input_data(self):
-        self.dbhost = raw_input(
-            "please, enter db host and press \"Return/Enter\": ")
+        self.button =  '\"Return/Enter\":'
+        Button = self.button
+        self.dbhost = raw_input("please, enter db host and press {0}".format(Button))
         self.dbuser = raw_input(
-            "please, enter db user and press \"Return/Enter\": ")
+            "please, enter db user and press {0}".format(Button))
         self.dbpassword = getpass.getpass(
-            "please, enter password and press \"Return/Enter\": ")      # doesn't work right at eclipse
+            "please, enter password and press {0}".format(Button)) 
         self.dbname = self.dbname = raw_input(
-            "please, enter db name and press \"Return/Enter\": ")
+            "please, enter db name and press {0}".format(Button))
         self.table = raw_input(
-            "please, enter table name and press \"Return/Enter\": ")
+            "please, enter table name and press {0}".format(Button))
         self.rows_to_add = self.enter_number(
-            "Please, enter number of rows to add: ")
+            "Please, enter number of rows to add: {0}".format(Button))
         self.bulk_size = self.enter_number(
-            "Please, enter bulk size of insert operation: ")
-        self.id_column = raw_input("please, enter id column: ")
+            "Please, enter bulk size of insert operation: {0}".format(Button))
+        self.id_column = raw_input("please, enter id column: {0}".format(Button))
 
     def connect_to_db(self):
         self.db = MySQLdb.connect(
