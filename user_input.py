@@ -196,8 +196,12 @@ class UsersData:
         self.connect_to_db()
         db = self.db
         cursor = db.cursor()
-        column_names_query = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA ='" + \
-            self.dbname + "' AND TABLE_NAME='" + self.table + "';"
+        column_names_query = ("SELECT COLUMN_NAME "
+                              "FROM "
+                              "INFORMATION_SCHEMA.COLUMNS "
+                              "WHERE TABLE_SCHEMA ='{0}' AND "
+                              "TABLE_NAME='{1}';")\
+            .format(self.dbname,self.table )
         self.show_query(column_names_query)
         cursor.execute(column_names_query)
         row_2 = cursor.fetchall()
