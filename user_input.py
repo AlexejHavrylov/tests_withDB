@@ -17,7 +17,8 @@ class UsersData:
     def user_input_data(self):
         self.button =  '\"Return/Enter\":'
         Button = self.button
-        self.dbhost = raw_input("please, enter db host and press {0}".format(Button))
+        self.dbhost = raw_input("please, enter db host "
+                                "and press {0}".format(Button))
         self.dbuser = raw_input(
             "please, enter db user and press {0}".format(Button))
         self.dbpassword = getpass.getpass(
@@ -30,7 +31,8 @@ class UsersData:
             "Please, enter number of rows to add: {0}".format(Button))
         self.bulk_size = self.enter_number(
             "Please, enter bulk size of insert operation: {0}".format(Button))
-        self.id_column = raw_input("please, enter id column: {0}".format(Button))
+        self.id_column = raw_input("please, "
+                                   "enter id column: {0}".format(Button))
 
     def connect_to_db(self):
         self.db = MySQLdb.connect(
