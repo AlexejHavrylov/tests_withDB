@@ -109,17 +109,21 @@ class UsersData:
                 self.insert_value()
                 i += 1
         except:
-            print "Can\'t get data from table \'" + self.table + "\'..."
+            print ("Can\'t get data from table \'{0}\'...").format(self.table)
         finally:
             self.print_table("Checking a Data base...")
 
     def show_input(self):
-        print self.dbhost, self.dbpassword, self.dbuser, self.dbname, self.table, self.rows_to_add, self.id_column, self.bulk_size
+        print self.dbhost, \
+	        self.dbpassword, \
+	        self.dbuser, self.dbname, \
+	        self.table, self.rows_to_add, \
+	        self.id_column, self.bulk_size
 
     def enter_number(self, message):
         """
-        Method takes user data and verifies the type('int' or 'str') of entered data.
-
+        Method takes user data and verifies the type('int' or 'str') of
+        entered data.
         """
         i = 4
         while i > 0:
@@ -158,8 +162,11 @@ class UsersData:
         self.connect_to_db()
         db = self.db
         cursor = db.cursor()
-        column_names_query = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA ='" + \
-            self.dbname + "' AND TABLE_NAME='" + self.table + "';"
+        column_names_query =("SELECT COLUMN_NAME "
+                             "FROM INFORMATION_SCHEMA.COLUMNS "
+                             "WHERE TABLE_SCHEMA ='{0}'AND "
+                             "TABLE_NAME='{1}';")\
+            .format(self.dbname, self.table)
         self.show_query(column_names_query)
         cursor.execute(column_names_query)
         row_2 = cursor.fetchall()
