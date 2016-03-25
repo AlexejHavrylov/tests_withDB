@@ -85,8 +85,8 @@ class UsersData:
         column_names = self.get_column_names()
         random_row_id = self.find_id()[0]
         i = 0
-        insert_query = "INSERT INTO " + self.table + \
-            "( " + column_names + ") VALUES "
+        insert_query = ("INSERT INTO {0}"
+                        "({1}) VALUES ").format(self.table, column_names)
         while i < self.bulk_size:
             insert_query += "(" + self.get_values_with_replaced_dates() + ") ,"
             if (i == self.bulk_size - 1):
