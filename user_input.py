@@ -152,7 +152,7 @@ class UsersData:
         db = self.db
         table = self.table
         cursor = db.cursor()
-        select_query = "SELECT * FROM " + table + ";"
+        select_query = ("SELECT * FROM {0};").format(table)
         cursor.execute(select_query)
         rows = cursor.fetchall()
         for row in rows:
