@@ -45,8 +45,9 @@ class UsersData:
         cursor.execute(query)
         rows = cursor.fetchall()
         random_row_id = random.choice(rows)[0]
-        random_row_query = "SELECT * FROM " + self.table + \
-            " WHERE " + self.id_column + " = " + str(random_row_id) + ";"
+        random_row_query = ("SELECT * FROM {0} "
+                            "WHERE {1} = " + str(random_row_id) + ";")\
+            .format(self.table, self.id_column)
         self.show_query(random_row_query)
         cursor.execute(random_row_query)
         random_row = cursor.fetchall()
